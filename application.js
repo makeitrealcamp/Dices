@@ -14,23 +14,31 @@
 
 
 $(document).ready(function() {
-  function Dice(maxSidesParam){
-    this.sides = maxSidesParam;
+  function Dice( sides ){
+    this.sides =  sides ;
+    this.currentSide = 0;
   }
 
   Dice.prototype = {
     roll: function(){
-      // $('.dice').append('<div class="die">0</div>');
+      this.currentSide = Math.floor((Math.random()* this.sides )+1);
     }
   }
 
   function View(){
-    this.dices = 0;
+    this.dices = [];
   }
 
   View.prototype = {
-    addDices: function(){
-      $('.dice').append('<div class="die">0</div>');
+    addDices: function(sides){
+      this.dices.push( new Dice(sides) );
+    },
+    render: function(){
+      $('.dice').empty();
+      $( this.dices ).each(function(k, die) {
+        $('.dice').append(`<div class="die"> ${ die.currentSide } </div>`);
+      });
+
     }
   }
 
@@ -43,16 +51,20 @@ $(document).ready(function() {
     listenAddBtn: function(){
       self = this;
       $('.add').click(function(event) {
-        self.view.addDices()
+        self.view.addDices(10);
+        self.view.render();
       })
     },
     listenRollBtn: function(){
       self = this;
       $('.roll').click(function(event) {
-        $('.die').each(function(k, die) {
-          var value = Math.floor((Math.random()* self.model.sides )+1);
-          $(die).text(value);
-        });
+
+        for (var diceIndex in self.view.dices) {
+          self.view.dices[diceIndex].roll();
+        }
+        // console.log(self)
+        self.view.render();
+
       })
     }
   };
@@ -62,5 +74,5 @@ $(document).ready(function() {
   var controller = new Controller(view, dice)
   controller.listenAddBtn()
   controller.listenRollBtn()
-  console.log(controller)
+
  });

@@ -25,18 +25,25 @@
   function Controller(view, model){
     this.view = view
     this.model = model
-
   }
+
   Controller.prototype = {
-    listenButton: function(){
+    listenAddBtn: function(){
       $('.add').click(function(event) {
-        console.log("add clicked")
-      });
+        console.log("add")
+      })
+    },
+    listenRollBtn: function(){
+      $('.roll').click(function(event) {
+        console.log("roll")
+      })
     }
   };
+
   var dice = new Dice(10)
   var view = new View()
   var controller = new Controller(view, dice)
-  controller.listenButton()
+  controller.listenAddBtn()
+  controller.listenRollBtn()
   console.log(controller)
  // });
